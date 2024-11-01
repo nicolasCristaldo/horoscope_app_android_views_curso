@@ -7,8 +7,10 @@ import com.nicolascristaldo.horoscopeapp.R
 import com.nicolascristaldo.horoscopeapp.domain.model.HoroscopeInfo
 import com.nicolascristaldo.horoscopeapp.ui.horoscope.HoroscopeViewModel
 
-class HoroscopeAdapter(private var horoscopeList: List<HoroscopeInfo> = emptyList()):
-    RecyclerView.Adapter<HoroscopeViewHolder>() {
+class HoroscopeAdapter(
+    private var horoscopeList: List<HoroscopeInfo> = emptyList(),
+    private val onItemSelected: (HoroscopeInfo) -> Unit
+): RecyclerView.Adapter<HoroscopeViewHolder>() {
 
         fun updateList(list: List<HoroscopeInfo>) {
             horoscopeList = list
@@ -24,6 +26,6 @@ class HoroscopeAdapter(private var horoscopeList: List<HoroscopeInfo> = emptyLis
     override fun getItemCount() = horoscopeList.size
 
     override fun onBindViewHolder(holder: HoroscopeViewHolder, position: Int) {
-        holder.render(horoscopeList[position])
+        holder.render(horoscopeList[position], onItemSelected)
     }
 }
