@@ -36,8 +36,8 @@ class DetailActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        detailViewModel.getHoroscope(args.type)
         initUI()
+        detailViewModel.getHoroscope(args.type)
     }
 
     private fun initUI() {
@@ -54,8 +54,8 @@ class DetailActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 detailViewModel.state.collect {
                     when(it) {
+                        DetailState.Loading -> loadingState()
                         is DetailState.Error -> errorState()
-                        is DetailState.Loading -> loadingState()
                         is DetailState.Success -> successState(it)
                     }
                 }
