@@ -1,11 +1,16 @@
 package com.nicolascristaldo.horoscopeapp.ui.palmistry
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
 import com.nicolascristaldo.horoscopeapp.databinding.FragmentPalmistryBinding
@@ -24,10 +29,9 @@ class PalmistryFragment : Fragment() {
     private val requirePermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isgranted ->
-        if(isgranted) {
-
-        }
-        else {
+        if (isgranted) {
+            startCamera()
+        } else {
             Toast.makeText(
                 requireContext(),
                 "Acepta los permisos para iniciar camara.",
@@ -39,10 +43,9 @@ class PalmistryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(checkCameraPermission()) {
-
-        }
-        else {
+        if (checkCameraPermission()) {
+            startCamera()
+        } else {
             requirePermissionLauncher.launch(CAMERA_PERMISSION)
         }
     }
@@ -60,6 +63,30 @@ class PalmistryFragment : Fragment() {
     ): View {
         _binding = FragmentPalmistryBinding.inflate(layoutInflater, container, false)
         return binding.root
+    }
+
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+
+        cameraProviderFuture.addListener({
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+
+            val preview = Preview.Builder()
+                .build()
+                .also {
+                    it.setSurfaceProvider(binding.finder.surfaceProvider)
+                }
+
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+            try {
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(this, cameraSelector, preview)
+            } catch (e: Exception) {
+                Log.e("camera", "error: ${e.message}")
+            }
+
+        }, ContextCompat.getMainExecutor(requireContext()))
     }
 
 }
