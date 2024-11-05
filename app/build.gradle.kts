@@ -17,7 +17,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.nicolascristaldo.horoscopeapp.CustomTestRunner"
     }
 
     buildTypes {
@@ -81,17 +81,23 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.3.1")
 
     //Camera X
-    implementation ("androidx.camera:camera-core:$cameraVersion")
-    implementation ("androidx.camera:camera-camera2:$cameraVersion")
-    implementation ("androidx.camera:camera-lifecycle:$cameraVersion")
-    implementation ("androidx.camera:camera-view:$cameraVersion")
-    implementation ("androidx.camera:camera-extensions:$cameraVersion")
+    implementation("androidx.camera:camera-core:$cameraVersion")
+    implementation("androidx.camera:camera-camera2:$cameraVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraVersion")
+    implementation("androidx.camera:camera-view:$cameraVersion")
+    implementation("androidx.camera:camera-extensions:$cameraVersion")
 
     //unit testing
     testImplementation(libs.junit)
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     testImplementation("io.mockk:mockk:1.12.3")
 
+    //ui testing
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.1")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.6.1")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.48")
+    androidTestImplementation("androidx.fragment:fragment-testing:1.8.5")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.48")
 }
